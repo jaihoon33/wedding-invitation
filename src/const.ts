@@ -10,6 +10,9 @@ dayjs.locale("ko")
 
 export { dayjs }
 
+/** 공개 청첩장과 카카오 공유에서 사용하는 고정 주소입니다. */
+export const INVITATION_URL = "https://jaihoon33.github.io/wedding-invitation/"
+
 /**
  * 예식 일시 설정
  * Asia/Seoul 타임존 기준으로 설정합니다.

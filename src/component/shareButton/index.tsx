@@ -2,8 +2,7 @@ import {
   BRIDE_FULLNAME,
   GROOM_FULLNAME,
   LOCATION,
-  SHARE_ADDRESS,
-  SHARE_ADDRESS_TITLE,
+  INVITATION_URL,
   WEDDING_DATE,
   WEDDING_DATE_FORMAT,
 } from "../../const"
@@ -11,8 +10,7 @@ import ktalkIcon from "../../icons/ktalk-icon.png"
 import { LazyDiv } from "../lazyDiv"
 import { useKakao } from "../store"
 
-const baseUrl = import.meta.env.BASE_URL
-const invitationUrl = new URL(baseUrl, window.location.origin).toString()
+const invitationUrl = INVITATION_URL
 const previewImageUrl = new URL("preview_image.png", invitationUrl).toString()
 
 /**
@@ -32,11 +30,9 @@ export const ShareButton = () => {
             return
           }
 
-          // 카카오톡 공유 전송 (위치 기반 템플릿 사용)
+          // 이미지·제목·버튼 모두 동일한 공식 청첩장으로 연결합니다.
           kakao.Share.sendDefault({
-            objectType: "location",
-            address: SHARE_ADDRESS,
-            addressTitle: SHARE_ADDRESS_TITLE,
+            objectType: "feed",
             content: {
               title: `${GROOM_FULLNAME} ❤️ ${BRIDE_FULLNAME}의 결혼식에 초대합니다.`,
               description:
@@ -47,6 +43,15 @@ export const ShareButton = () => {
                 webUrl: invitationUrl,
               },
             },
+            buttons: [
+              {
+                title: "청첩장 보기",
+                link: {
+                  mobileWebUrl: invitationUrl,
+                  webUrl: invitationUrl,
+                },
+              },
+            ],
           })
         }}
       >
