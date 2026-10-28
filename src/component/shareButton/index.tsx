@@ -3,6 +3,7 @@ import {
   GROOM_FULLNAME,
   LOCATION,
   INVITATION_URL,
+  KAKAO_SHARE_TEMPLATE_ID,
   WEDDING_DATE,
   WEDDING_DATE_FORMAT,
 } from "../../const"
@@ -30,28 +31,15 @@ export const ShareButton = () => {
             return
           }
 
-          // 이미지·제목·버튼 모두 동일한 공식 청첩장으로 연결합니다.
-          kakao.Share.sendDefault({
-            objectType: "feed",
-            content: {
-              title: `${GROOM_FULLNAME} ❤️ ${BRIDE_FULLNAME}의 결혼식에 초대합니다.`,
-              description:
+          // 하단 앱 이름의 출처 링크도 포함해 모든 링크를 지정한 템플릿입니다.
+          kakao.Share.sendCustom({
+            templateId: KAKAO_SHARE_TEMPLATE_ID,
+            templateArgs: {
+              TITLE: `${GROOM_FULLNAME} ❤️ ${BRIDE_FULLNAME}의 결혼식에 초대합니다.`,
+              DESCRIPTION:
                 WEDDING_DATE.format(WEDDING_DATE_FORMAT) + "\n" + LOCATION,
-              imageUrl: previewImageUrl,
-              link: {
-                mobileWebUrl: invitationUrl,
-                webUrl: invitationUrl,
-              },
+              IMAGE: previewImageUrl,
             },
-            buttons: [
-              {
-                title: "청첩장 보기",
-                link: {
-                  mobileWebUrl: invitationUrl,
-                  webUrl: invitationUrl,
-                },
-              },
-            ],
           })
         }}
       >

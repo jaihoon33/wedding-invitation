@@ -13,6 +13,9 @@ export { dayjs }
 /** 공개 청첩장과 카카오 공유에서 사용하는 고정 주소입니다. */
 export const INVITATION_URL = "https://jaihoon33.github.io/wedding-invitation/"
 
+/** 카카오 콘솔에서 출처 링크까지 공식 청첩장으로 지정한 공유 템플릿입니다. */
+export const KAKAO_SHARE_TEMPLATE_ID = 138458
+
 /**
  * 예식 일시 설정
  * Asia/Seoul 타임존 기준으로 설정합니다.
