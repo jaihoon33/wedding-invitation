@@ -13,6 +13,9 @@ export { dayjs }
 /** 공개 청첩장과 카카오 공유에서 사용하는 고정 주소입니다. */
 export const INVITATION_URL = "https://jaihoon33.github.io/wedding-invitation/"
 
+/** 카카오 공유 및 링크 미리보기용 사진(_15)입니다. */
+export const SHARE_IMAGE_FILE = "preview-wedding-20261029.jpg"
+
 /** 카카오 콘솔에서 출처 링크까지 공식 청첩장으로 지정한 공유 템플릿입니다. */
 export const KAKAO_SHARE_TEMPLATE_ID = 138458
 

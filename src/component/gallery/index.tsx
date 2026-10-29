@@ -10,7 +10,7 @@ import { GALLERY_IMAGES } from "../../images"
  */
 const CAROUSEL_ITEMS = GALLERY_IMAGES.map((item, idx) => (
   <div className="carousel-item" key={idx}>
-    <img src={item} draggable={false} alt={`${idx}`} />
+    <img src={item} decoding="async" draggable={false} alt={`웨딩 사진 ${idx + 1}`} />
   </div>
 ))
 
@@ -51,14 +51,6 @@ export const Gallery = () => {
   const modalState = useState(false)
   const carouselRef = useRef<HTMLDivElement>({} as HTMLDivElement)
 
-  useEffect(() => {
-    // 이미지 프리로드 (Preload)
-    GALLERY_IMAGES.forEach((image) => {
-      const img = new Image()
-      img.src = image
-    })
-  }, [])
-
   // 슬라이드 인덱스 상태
   const [slide, _setSlide] = useState(0)
   const slideRef = useRef(0)
@@ -66,6 +58,16 @@ export const Gallery = () => {
     _setSlide(slide)
     slideRef.current = slide
   }
+
+  useEffect(() => {
+    // 전체 사진 대신 다음·이전 사진만 준비해 첫 방문의 전송량을 줄입니다.
+    for (const offset of [-1, 1]) {
+      const image = new Image()
+      image.src = GALLERY_IMAGES[
+        (slide + offset + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
+      ]
+    }
+  }, [slide])
 
   // 캐러셀 동작 상태
   const [status, _setStatus] = useState<Status>("stationary")
@@ -415,7 +417,9 @@ export const Gallery = () => {
               <img
                 key={idx}
                 src={image}
-                alt={`${idx}`}
+                loading="lazy"
+                decoding="async"
+                alt={`웨딩 사진 ${idx + 1}`}
                 draggable={false}
                 onClick={() => {
                   if (statusRef.current === "stationary") {

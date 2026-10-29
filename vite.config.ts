@@ -7,6 +7,7 @@ import pkg from "./package.json"
 import { createHtmlPlugin } from "vite-plugin-html"
 import {
   INVITATION_URL,
+  SHARE_IMAGE_FILE,
   GROOM_FULLNAME,
   BRIDE_FULLNAME,
   WEDDING_DATE,
@@ -34,6 +35,7 @@ export default defineConfig({
       inject: {
         data: {
           INVITATION_URL,
+          SHARE_IMAGE_FILE,
           GROOM_FULLNAME,
           BRIDE_FULLNAME,
           DESCRIPTION: `${WEDDING_DATE.format(WEDDING_DATE_FORMAT)} ${LOCATION}`,

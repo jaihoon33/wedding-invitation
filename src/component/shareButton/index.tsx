@@ -4,6 +4,7 @@ import {
   LOCATION,
   INVITATION_URL,
   KAKAO_SHARE_TEMPLATE_ID,
+  SHARE_IMAGE_FILE,
   WEDDING_DATE,
   WEDDING_DATE_FORMAT,
 } from "../../const"
@@ -12,7 +13,7 @@ import { LazyDiv } from "../lazyDiv"
 import { useKakao } from "../store"
 
 const invitationUrl = INVITATION_URL
-const previewImageUrl = new URL("preview_image.png", invitationUrl).toString()
+const previewImageUrl = new URL(SHARE_IMAGE_FILE, invitationUrl).toString()
 
 /**
  * 카카오톡으로 초대장을 공유할 수 있는 버튼 컴포넌트입니다.

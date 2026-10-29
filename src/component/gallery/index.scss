@@ -94,6 +94,8 @@ $transition-duration: 0.3s;
 
     .carousel-indicator {
       display: flex;
+      flex-wrap: wrap;
+      max-width: $gallery-width;
       justify-content: center;
       margin-top: 1rem;
 
