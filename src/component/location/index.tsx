@@ -27,7 +27,8 @@ export const Location = () => {
   useEffect(
     () => () => {
       if (statusTimeout.current !== null) clearTimeout(statusTimeout.current)
-      if (clipboardTimeout.current !== null) clearTimeout(clipboardTimeout.current)
+      if (clipboardTimeout.current !== null)
+        clearTimeout(clipboardTimeout.current)
     },
     [],
   )
@@ -58,7 +59,8 @@ export const Location = () => {
   const copyAddress = () => {
     const attempt = ++copyAttempt.current
     if (statusTimeout.current !== null) clearTimeout(statusTimeout.current)
-    if (clipboardTimeout.current !== null) clearTimeout(clipboardTimeout.current)
+    if (clipboardTimeout.current !== null)
+      clearTimeout(clipboardTimeout.current)
     setCopyStatus("copying")
 
     const finish = (copied: boolean) => {
@@ -88,14 +90,20 @@ export const Location = () => {
       // 사용자 터치 이벤트 안에서 바로 호출해야 iOS Safari의 복사 권한이 유지됩니다.
       navigator.clipboard.writeText(LOCATION_ROAD_ADDRESS).then(
         () => {
-          if (clipboardTimeout.current === null || attempt !== copyAttempt.current)
+          if (
+            clipboardTimeout.current === null ||
+            attempt !== copyAttempt.current
+          )
             return
           clearTimeout(clipboardTimeout.current)
           clipboardTimeout.current = null
           finish(true)
         },
         () => {
-          if (clipboardTimeout.current === null || attempt !== copyAttempt.current)
+          if (
+            clipboardTimeout.current === null ||
+            attempt !== copyAttempt.current
+          )
             return
           clearTimeout(clipboardTimeout.current)
           clipboardTimeout.current = null
@@ -103,7 +111,8 @@ export const Location = () => {
         },
       )
     } catch {
-      if (clipboardTimeout.current !== null) clearTimeout(clipboardTimeout.current)
+      if (clipboardTimeout.current !== null)
+        clearTimeout(clipboardTimeout.current)
       clipboardTimeout.current = null
       finish(copySelectedAddress())
     }
@@ -127,7 +136,9 @@ export const Location = () => {
             className="copy-address"
             onClick={copyAddress}
             aria-label={
-              copyStatus === "copied" ? "도로명 주소 복사 완료" : "도로명 주소 복사"
+              copyStatus === "copied"
+                ? "도로명 주소 복사 완료"
+                : "도로명 주소 복사"
             }
           >
             <svg
@@ -173,8 +184,10 @@ export const Location = () => {
             인천 지하철 <b>작전역 4번 출구</b> 하차
             <br />
             → 도보 5분
-            <br />1호선 부평역 / 7호선 부평구청역에서
-            <br />인천지하철 계양·귤현 방향으로 환승
+            <br />
+            1호선 부평역 / 7호선 부평구청역에서
+            <br />
+            인천지하철 계양·귤현 방향으로 환승
           </div>
           <div />
           <div className="content">
@@ -185,8 +198,7 @@ export const Location = () => {
             - 시내버스: 30, 86
             <br />
             - 광역버스: 5000, 1500, 9500
-            <br />
-            - 마을버스: 583, 584-1, 588, 590, 585
+            <br />- 마을버스: 583, 584-1, 588, 590, 585
           </div>
         </div>
 
@@ -203,8 +215,10 @@ export const Location = () => {
             내비게이션에서 <b>카리스호텔</b>을 검색해 주세요.
             <div className="parking-guide">
               <div className="subheading">주차 안내</div>
-              웨딩홀 주차장과 계산중앙교회 주차장(무료) 또는 홈플러스
-              작전점 주차장(2시간 무료)을 이용하실 수 있습니다.
+              <ul>
+                <li>웨딩홀 주차장, 계산중앙교회 주차장(무료)</li>
+                <li>홈플러스 작전점 주차장(2시간 무료)</li>
+              </ul>
             </div>
           </div>
         </div>

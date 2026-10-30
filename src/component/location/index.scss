@@ -209,6 +209,15 @@
       .parking-guide {
         margin-top: 1rem;
 
+        ul {
+          margin: 0;
+          padding-left: 1.1rem;
+        }
+
+        li + li {
+          margin-top: 0.35rem;
+        }
+
         .subheading {
           margin-bottom: 0.35rem;
           color: var(--theme-color);
