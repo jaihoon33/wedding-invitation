@@ -53,7 +53,7 @@ import thumb25 from "./wedding-20261030/thumbs/KakaoTalk_20261030_081949307_25.w
 import photo26 from "./wedding-20261030/KakaoTalk_20261030_081949307_26.webp"
 import thumb26 from "./wedding-20261030/thumbs/KakaoTalk_20261030_081949307_26.webp"
 
-/** 새 원본 파일명 순서입니다. 접미사 없는 파일 다음에 _01~_26이 이어집니다. */
+/** 원본 파일명 순서입니다. 접미사 없는 파일 다음에 _01~_26이 이어집니다. */
 export const GALLERY_IMAGES = [
   photo0,
   photo1,
@@ -84,7 +84,7 @@ export const GALLERY_IMAGES = [
   photo26,
 ]
 
-/** 전체보기에는 작은 사본을 사용하고 선택한 사진만 큰 이미지로 표시합니다. */
+/** 목록에는 별도의 768px 썸네일을 사용하고, 선택하면 3200px 사진을 엽니다. */
 export const GALLERY_THUMBNAILS = [
   thumb0,
   thumb1,
@@ -115,37 +115,37 @@ export const GALLERY_THUMBNAILS = [
   thumb26,
 ]
 
-/** 이미지가 로드되기 전에도 같은 비율의 공간을 확보합니다. */
+/** 휴대폰과 태블릿 모두 같은 고화질 사진과 비율을 사용합니다. */
 export const GALLERY_IMAGE_SIZES = [
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 1440, height: 960 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
-  { width: 1067, height: 1600 },
-  { width: 960, height: 1440 },
-  { width: 960, height: 1440 },
+  { width: 2133, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 3200, height: 2133 },
+  { width: 2134, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2134, height: 3200 },
+  { width: 2133, height: 3200 },
+  { width: 2133, height: 3200 },
 ]
 
-/** 메인과 갤러리 _24는 같은 최적화 파일을 공유합니다. 원본은 보존합니다. */
+/** 사용자가 지정한 _24 사진을 메인과 갤러리에서 공유합니다. */
 export const COVER_IMAGE = photo24
-export const COVER_IMAGE_SIZE = { width: 1067, height: 1600 }
+export const COVER_IMAGE_SIZE = GALLERY_IMAGE_SIZES[24]

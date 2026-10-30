@@ -188,7 +188,7 @@ export const Gallery = () => {
             <div
               className="gallery-lightbox__backdrop"
               style={{
-                backgroundImage: `url(${GALLERY_IMAGES[selectedPhoto]})`,
+                backgroundImage: `url(${GALLERY_THUMBNAILS[selectedPhoto]})`,
               }}
               aria-hidden="true"
             />
