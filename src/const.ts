@@ -13,8 +13,8 @@ export { dayjs }
 /** 공개 청첩장과 카카오 공유에서 사용하는 고정 주소입니다. */
 export const INVITATION_URL = "https://jaihoon33.github.io/wedding-invitation/"
 
-/** 카카오 공유 및 링크 미리보기용 사진(_15)입니다. */
-export const SHARE_IMAGE_FILE = "preview-wedding-20261029.jpg"
+/** 메인과 같은 새 원본 _24 사진을 사용하는 공유용 사본입니다. */
+export const SHARE_IMAGE_FILE = "preview-wedding-20261030.jpg"
 
 /** 카카오 콘솔에서 출처 링크까지 공식 청첩장으로 지정한 공유 템플릿입니다. */
 export const KAKAO_SHARE_TEMPLATE_ID = 138458
@@ -43,13 +43,16 @@ export const HOLIDAYS: number[] = []
  */
 export const LOCATION = "카리스호텔 15층 벨라지오 가든홀"
 
+/** 지도 검색에는 층·홀 이름 대신 등록된 예식장 이름을 사용합니다. */
+export const LOCATION_MAP_QUERY = "카리스호텔 웨딩컨벤션"
+export const NAVER_MAP_SEARCH_URL = `https://map.naver.com/p/search/${encodeURIComponent(LOCATION_MAP_QUERY)}`
+
 /**
  * 예식 장소 상세 주소
  */
 export const LOCATION_ROAD_ADDRESS = "인천 계양구 계양대로 28"
 export const LOCATION_PARCEL_ADDRESS = "인천 계양구 작전동 428-2"
-export const LOCATION_ADDRESS =
-  `${LOCATION_ROAD_ADDRESS} (${LOCATION_PARCEL_ADDRESS})`
+export const LOCATION_ADDRESS = `${LOCATION_ROAD_ADDRESS} (${LOCATION_PARCEL_ADDRESS})`
 
 /**
  * 카카오톡 공유 시 사용할 위치 정보 주소

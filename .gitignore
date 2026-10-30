@@ -4,6 +4,9 @@
 # production
 /build
 
+# 원본 사진은 로컬에 보관하고 최적화한 사이트용 사본만 커밋합니다.
+/재훈이 결혼사진/
+
 # misc
 .DS_Store
 .env.local

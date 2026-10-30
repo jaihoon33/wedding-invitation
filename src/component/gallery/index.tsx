@@ -3,14 +3,26 @@ import ArrowLeft from "../../icons/angle-left-sm.svg?react"
 import { LazyDiv } from "../lazyDiv"
 import { Button } from "../button"
 import { Modal } from "../modal"
-import { GALLERY_IMAGES } from "../../images"
+import {
+  GALLERY_IMAGES,
+  GALLERY_IMAGE_SIZES,
+  GALLERY_THUMBNAILS,
+} from "../../images"
+import { useNearViewport } from "../../hooks/useNearViewport"
 
 /**
  * 캐러셀 아이템 요소 생성
  */
 const CAROUSEL_ITEMS = GALLERY_IMAGES.map((item, idx) => (
   <div className="carousel-item" key={idx}>
-    <img src={item} decoding="async" draggable={false} alt={`웨딩 사진 ${idx + 1}`} />
+    <img
+      src={item}
+      width={GALLERY_IMAGE_SIZES[idx].width}
+      height={GALLERY_IMAGE_SIZES[idx].height}
+      decoding="async"
+      draggable={false}
+      alt={`웨딩 사진 ${idx + 1}`}
+    />
   </div>
 ))
 
@@ -49,7 +61,7 @@ type ClickMove = "left" | "right" | null
  */
 export const Gallery = () => {
   const modalState = useState(false)
-  const carouselRef = useRef<HTMLDivElement>({} as HTMLDivElement)
+  const [carouselRef, isNearViewport] = useNearViewport<HTMLDivElement>()
 
   // 슬라이드 인덱스 상태
   const [slide, _setSlide] = useState(0)
@@ -60,14 +72,16 @@ export const Gallery = () => {
   }
 
   useEffect(() => {
+    if (!isNearViewport) return
     // 전체 사진 대신 다음·이전 사진만 준비해 첫 방문의 전송량을 줄입니다.
     for (const offset of [-1, 1]) {
       const image = new Image()
-      image.src = GALLERY_IMAGES[
-        (slide + offset + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
-      ]
+      image.src =
+        GALLERY_IMAGES[
+          (slide + offset + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
+        ]
     }
-  }, [slide])
+  }, [slide, isNearViewport])
 
   // 캐러셀 동작 상태
   const [status, _setStatus] = useState<Status>("stationary")
@@ -206,11 +220,11 @@ export const Gallery = () => {
         dragging(
           dragOptionRef.current,
           e.clientX,
-          carouselRef.current.clientWidth,
+          carouselRef.current?.clientWidth ?? 0,
         )
       }
     },
-    [dragging],
+    [carouselRef, dragging],
   )
 
   const onTouchMove = useCallback(
@@ -234,11 +248,11 @@ export const Gallery = () => {
         dragging(
           dragOptionRef.current,
           e.targetTouches[0].clientX,
-          carouselRef.current.clientWidth,
+          carouselRef.current?.clientWidth ?? 0,
         )
       }
     },
-    [dragging],
+    [carouselRef, dragging],
   )
 
   const onMouseTouchUp = useCallback(() => {
@@ -255,14 +269,19 @@ export const Gallery = () => {
         setStatus("stationary")
       }
     } else if (status === "dragging") {
-      dragEnd(slide, dragOptionRef.current, carouselRef.current.clientWidth)
+      dragEnd(
+        slide,
+        dragOptionRef.current,
+        carouselRef.current?.clientWidth ?? 0,
+      )
     } else if (status === "clickCanceled") {
       setStatus("stationary")
     }
-  }, [dragEnd, move])
+  }, [carouselRef, dragEnd, move])
 
   useEffect(() => {
     const carouselElement = carouselRef.current
+    if (!carouselElement) return
 
     window.addEventListener("mousemove", onMouseMove)
     carouselElement.addEventListener("touchmove", onTouchMove)
@@ -274,7 +293,7 @@ export const Gallery = () => {
       window.removeEventListener("mouseup", onMouseTouchUp)
       window.removeEventListener("touchend", onMouseTouchUp)
     }
-  }, [onMouseMove, onTouchMove, onMouseTouchUp])
+  }, [carouselRef, onMouseMove, onTouchMove, onMouseTouchUp])
 
   /**
    * 인디케이터 클릭 시 해당 슬라이드로 이동
@@ -338,20 +357,32 @@ export const Gallery = () => {
           >
             <div className={transformClass} style={transformStyle}>
               {/* 무한 캐러셀을 위한 슬라이드 구성 */}
-              {["dragging", "dragEnding"].includes(status) && [
-                ...(slide === 0
-                  ? [CAROUSEL_ITEMS[CAROUSEL_ITEMS.length - 1]]
-                  : []),
-                ...CAROUSEL_ITEMS.slice(slide === 0 ? 0 : slide - 1, slide + 2),
-                ...(slide === CAROUSEL_ITEMS.length - 1
-                  ? [CAROUSEL_ITEMS[0]]
-                  : []),
-              ]}
-              {status === "moving-right" &&
-                CAROUSEL_ITEMS.slice(moveOption.srcIdx, moveOption.dstIdx + 1)}
-              {status === "moving-left" &&
-                CAROUSEL_ITEMS.slice(moveOption.dstIdx, moveOption.srcIdx + 1)}
-              {["stationary", "clicked", "clickCanceled"].includes(status) &&
+              {isNearViewport &&
+                ["dragging", "dragEnding"].includes(status) && [
+                  ...(slide === 0
+                    ? [CAROUSEL_ITEMS[CAROUSEL_ITEMS.length - 1]]
+                    : []),
+                  ...CAROUSEL_ITEMS.slice(
+                    slide === 0 ? 0 : slide - 1,
+                    slide + 2,
+                  ),
+                  ...(slide === CAROUSEL_ITEMS.length - 1
+                    ? [CAROUSEL_ITEMS[0]]
+                    : []),
+                ]}
+              {/* 멀리 이동해도 중간 사진 전부를 내려받지 않고 출발·도착 사진만 사용합니다. */}
+              {isNearViewport &&
+                status === "moving-right" && [
+                  CAROUSEL_ITEMS[moveOption.srcIdx],
+                  CAROUSEL_ITEMS[moveOption.dstIdx],
+                ]}
+              {isNearViewport &&
+                status === "moving-left" && [
+                  CAROUSEL_ITEMS[moveOption.dstIdx],
+                  CAROUSEL_ITEMS[moveOption.srcIdx],
+                ]}
+              {isNearViewport &&
+                ["stationary", "clicked", "clickCanceled"].includes(status) &&
                 CAROUSEL_ITEMS[slide]}
             </div>
 
@@ -387,6 +418,9 @@ export const Gallery = () => {
             {CAROUSEL_ITEMS.map((_, idx) => (
               <button
                 key={idx}
+                type="button"
+                aria-label={`웨딩 사진 ${idx + 1} 보기`}
+                aria-current={idx === slide ? "true" : undefined}
                 className={`indicator${idx === slide ? " active" : ""}`}
                 onClick={() =>
                   onIndicatorClick(statusRef.current, slideRef.current, idx)
@@ -413,7 +447,7 @@ export const Gallery = () => {
 
         <div className="content">
           <div className="photo-list">
-            {GALLERY_IMAGES.map((image, idx) => (
+            {GALLERY_THUMBNAILS.map((image, idx) => (
               <img
                 key={idx}
                 src={image}

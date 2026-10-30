@@ -22,9 +22,18 @@ export const MusicPlayer = () => {
     }
     const startOnGesture = (event: Event) => {
       if (!event.isTrusted) return
-      if (event instanceof KeyboardEvent && event.key !== "Enter" && event.key !== " ") return
+      if (
+        event instanceof KeyboardEvent &&
+        event.key !== "Enter" &&
+        event.key !== " "
+      )
+        return
       clearGestureListeners()
-      if (event.target instanceof Element && event.target.closest(".music-player")) return
+      if (
+        event.target instanceof Element &&
+        event.target.closest(".music-player")
+      )
+        return
       void audio.play().catch(() => {
         // 브라우저 정책 차단은 음원 오류가 아니므로 재생 버튼을 그대로 유지합니다.
       })
@@ -66,12 +75,12 @@ export const MusicPlayer = () => {
 
   return (
     <div className="music-player">
+      {/* 자동재생은 effect에서 시도하고, 재생 전 전체 음원 다운로드는 피합니다. */}
       <audio
         ref={audioRef}
         src={musicUrl}
         loop
-        autoPlay
-        preload="auto"
+        preload="none"
         onPlay={() => {
           setIsPlaying(true)
           setHasError(false)

@@ -51,11 +51,19 @@ export default defineConfig({
           .replace(/<%= BRIDE_FULLNAME %>/g, BRIDE_FULLNAME)
         fs.writeFileSync(`${distFolder}/manifest.json`, processed)
         fs.mkdirSync(`${distFolder}/admin`, { recursive: true })
-        fs.copyFileSync(`${distFolder}/index.html`, `${distFolder}/admin/index.html`)
+        fs.copyFileSync(
+          `${distFolder}/index.html`,
+          `${distFolder}/admin/index.html`,
+        )
       },
     },
   ],
   server: { port: 3000 },
-  build: { outDir: distFolder },
+  build: {
+    outDir: distFolder,
+    // 작은 갤러리 썸네일도 JS에 포함하지 않아 전체보기를 열 때만 내려받습니다.
+    assetsInlineLimit: (filePath) =>
+      filePath.includes("/thumbs/") ? false : undefined,
+  },
   base,
 })

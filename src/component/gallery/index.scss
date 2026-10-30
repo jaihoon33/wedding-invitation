@@ -18,6 +18,8 @@ $transition-duration: 0.3s;
     align-items: center;
     .carousel {
       width: $gallery-width;
+      // 화면에 가까워지기 전에도 사진 공간을 확보해 본문이 밀리지 않도록 합니다.
+      height: $gallery-height;
       overflow: hidden;
       position: relative;
       z-index: 3;

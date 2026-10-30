@@ -5,7 +5,12 @@ import {
   WEDDING_DATE,
   WEDDING_DATE_FORMAT,
 } from "../../const"
-import { COVER_IMAGE, GALLERY_IMAGES } from "../../images"
+import {
+  COVER_IMAGE,
+  COVER_IMAGE_SIZE,
+  GALLERY_IMAGES,
+  GALLERY_IMAGE_SIZES,
+} from "../../images"
 import { LazyDiv } from "../lazyDiv"
 
 const DAY_OF_WEEK = [
@@ -26,26 +31,34 @@ const DAY_OF_WEEK = [
  */
 export const Cover = ({ design }: { design?: string }) => {
   const activeDesign = design ?? document.documentElement.dataset.design
-  const artwork: Record<string, { src: string; alt: string }> = {
+  const artwork: Record<
+    string,
+    { src: string; alt: string; width: number; height: number }
+  > = {
     cinema: {
       src: GALLERY_IMAGES[2],
+      ...GALLERY_IMAGE_SIZES[2],
       alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}이 함께한 웨딩 사진`,
     },
     editorial: {
       src: GALLERY_IMAGES[0],
+      ...GALLERY_IMAGE_SIZES[0],
       alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}의 웨딩 사진`,
     },
     aurora: {
       src: GALLERY_IMAGES[4],
+      ...GALLERY_IMAGE_SIZES[4],
       alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}이 함께한 웨딩 사진`,
     },
     letter: {
       src: GALLERY_IMAGES[7],
+      ...GALLERY_IMAGE_SIZES[7],
       alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}이 함께한 웨딩 사진`,
     },
   }
   const coverArt = artwork[activeDesign ?? ""] ?? {
     src: COVER_IMAGE,
+    ...COVER_IMAGE_SIZE,
     alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}의 웨딩 사진`,
   }
 
@@ -65,7 +78,13 @@ export const Cover = ({ design }: { design?: string }) => {
       </div>
       {/* 커버 이미지 */}
       <div className="image-wrapper">
-        <img src={coverArt.src} alt={coverArt.alt} fetchPriority="high" />
+        <img
+          src={coverArt.src}
+          alt={coverArt.alt}
+          width={coverArt.width}
+          height={coverArt.height}
+          fetchPriority="high"
+        />
       </div>
       <div className="subtitle">Save the date for the wedding of</div>
       {/* 이름 표시 */}

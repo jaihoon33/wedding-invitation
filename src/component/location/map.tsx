@@ -7,10 +7,13 @@ import LockIcon from "../../icons/lock-icon.svg?react"
 import UnlockIcon from "../../icons/unlock-icon.svg?react"
 import {
   LOCATION,
-  LOCATION_ROAD_ADDRESS,
+  LOCATION_MAP_QUERY,
+  NAVER_MAP_SEARCH_URL,
+  INVITATION_URL,
   WEDDING_HALL_POSITION,
 } from "../../const"
 import { NAVER_MAP_CLIENT_ID } from "../../env"
+import { useNearViewport } from "../../hooks/useNearViewport"
 
 /**
  * 지도를 표시하고 길찾기 앱(네이버, 카카오, 티맵) 연동 기능을 제공하는 컴포넌트입니다.
@@ -18,19 +21,27 @@ import { NAVER_MAP_CLIENT_ID } from "../../env"
  * @returns {JSX.Element} 지도 컴포넌트
  */
 export const Map = () => {
-  // 네이버 지도 클라이언트 ID가 설정되어 있을 때만 지도를 렌더링합니다.
-  return NAVER_MAP_CLIENT_ID ? (
-    <NaverMap />
-  ) : (
-    <div className="map-fallback">
-      <span>예식장 위치를 지도에서 확인해 주세요.</span>
-      <a
-        href={`https://map.naver.com/p/search/${encodeURIComponent(LOCATION_ROAD_ADDRESS)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        네이버 지도에서 보기
-      </a>
+  const [mapRef, isNearViewport] = useNearViewport<HTMLDivElement>()
+
+  // 지도를 보지 않고 나간 방문자는 지도 SDK와 API 이용량을 사용하지 않습니다.
+  return (
+    <div ref={mapRef}>
+      {NAVER_MAP_CLIENT_ID && isNearViewport ? (
+        <NaverMap />
+      ) : (
+        <div
+          className={`map-fallback${NAVER_MAP_CLIENT_ID ? " map-placeholder" : ""}`}
+        >
+          <span>예식장 위치를 지도에서 확인해 주세요.</span>
+          <a
+            href={NAVER_MAP_SEARCH_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            네이버 지도에서 보기
+          </a>
+        </div>
+      )}
     </div>
   )
 }
@@ -153,15 +164,12 @@ const NaverMap = () => {
               case "ios":
               case "android":
                 window.open(
-                  `nmap://search?query=${encodeURIComponent(LOCATION)}`,
+                  `nmap://search?query=${encodeURIComponent(LOCATION_MAP_QUERY)}&appname=${encodeURIComponent(INVITATION_URL)}`,
                   "_self",
                 )
                 break
               default:
-                window.open(
-                  `https://map.naver.com/p/search/${encodeURIComponent(LOCATION)}`,
-                  "_blank",
-                )
+                window.open(NAVER_MAP_SEARCH_URL, "_blank")
                 break
             }
           }}
