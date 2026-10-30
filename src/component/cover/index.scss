@@ -32,6 +32,10 @@
     overflow: hidden;
     display: flex;
     align-items: center;
+    picture {
+      display: block;
+      width: 100%;
+    }
     img {
       display: block;
       width: 100%;

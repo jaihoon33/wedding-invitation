@@ -1,12 +1,9 @@
 import {
-  BRIDE_FULLNAME,
-  GROOM_FULLNAME,
-  LOCATION,
   INVITATION_URL,
   KAKAO_SHARE_TEMPLATE_ID,
   SHARE_IMAGE_FILE,
-  WEDDING_DATE,
-  WEDDING_DATE_FORMAT,
+  SHARE_TITLE,
+  SHARE_DESCRIPTION,
 } from "../../const"
 import ktalkIcon from "../../icons/ktalk-icon.png"
 import { LazyDiv } from "../lazyDiv"
@@ -36,9 +33,8 @@ export const ShareButton = () => {
           kakao.Share.sendCustom({
             templateId: KAKAO_SHARE_TEMPLATE_ID,
             templateArgs: {
-              TITLE: `${GROOM_FULLNAME} ❤️ ${BRIDE_FULLNAME}의 결혼식에 초대합니다.`,
-              DESCRIPTION:
-                WEDDING_DATE.format(WEDDING_DATE_FORMAT) + "\n" + LOCATION,
+              TITLE: SHARE_TITLE,
+              DESCRIPTION: SHARE_DESCRIPTION,
               IMAGE: previewImageUrl,
             },
           })

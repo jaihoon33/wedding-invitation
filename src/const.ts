@@ -121,6 +121,10 @@ export const GROOM_TITLE = "장남"
 export const GROOM_FATHER = "이관희"
 export const GROOM_MOTHER = "오은숙"
 
+/** 공유 카드의 제한된 줄 수 안에서 예식 일시와 장소가 함께 보이도록 줄입니다. */
+export const SHARE_TITLE = `${GROOM_FULLNAME} ❤️ ${BRIDE_FULLNAME} 결혼합니다.`
+export const SHARE_DESCRIPTION = `${WEDDING_DATE.format("YYYY.MM.DD(ddd) A h:mm")}\n${LOCATION}`
+
 /**
  * 신랑측 연락처 및 계좌 정보
  */

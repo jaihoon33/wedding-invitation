@@ -12,11 +12,14 @@ import {
   GALLERY_IMAGE_SIZES,
   GALLERY_THUMBNAILS,
 } from "../../images"
+import { prepareGalleryPhoto } from "../../images/prepareGalleryPhoto"
 
 type Direction = -1 | 0 | 1
 type PhotoFrame = {
   index: number
+  src: string
   previous: number | null
+  previousSrc: string | null
   direction: Direction
   offset: number
   revision: number
@@ -87,7 +90,7 @@ export const PhotoViewer = ({
 
   useEffect(() => {
     let cancelled = false
-    const image = new Image()
+    const photo = prepareGalleryPhoto(request.index, "high")
     setLoadState("loading")
     setShowLoader(false)
     // 캐시된 사진에서는 로딩 표시를 생략하고, 느린 연결에서는 원래 사진을 유지합니다.
@@ -96,18 +99,19 @@ export const PhotoViewer = ({
       dragOffsetRef.current = 0
       setDragOffset(0)
     }, 180)
-    image.decoding = "async"
-    image.fetchPriority = "high"
-    image.src = GALLERY_IMAGES[request.index]
-    void image.decode().then(
+    void photo.ready.then(
       () => {
         if (cancelled) return
         window.clearTimeout(loadingTimer)
         const offset = dragOffsetRef.current
+        const src = photo.image.currentSrc || photo.image.src
         setFrame((current) => ({
           index: request.index,
+          src,
           previous:
             current && current.index !== request.index ? current.index : null,
+          previousSrc:
+            current && current.index !== request.index ? current.src : null,
           direction: request.direction,
           offset,
           revision: request.revision,
@@ -132,7 +136,7 @@ export const PhotoViewer = ({
     return () => {
       cancelled = true
       window.clearTimeout(loadingTimer)
-      image.removeAttribute("src")
+      photo.dispose()
     }
   }, [request])
 
@@ -140,18 +144,14 @@ export const PhotoViewer = ({
     if (displayedIndex === undefined) return
     // 전체 사진을 선다운로드하지 않고 현재 사진의 양옆 두 장만 준비합니다.
     const neighbors = [-1, 1].map((offset) => {
-      const image = new Image()
-      image.decoding = "async"
-      image.fetchPriority = "low"
-      image.src =
-        GALLERY_IMAGES[
-          (displayedIndex + offset + GALLERY_IMAGES.length) %
-            GALLERY_IMAGES.length
-        ]
-      void image.decode().catch(() => undefined)
-      return image
+      const index =
+        (displayedIndex + offset + GALLERY_IMAGES.length) %
+        GALLERY_IMAGES.length
+      const photo = prepareGalleryPhoto(index, "low")
+      void photo.ready.catch(() => undefined)
+      return photo
     })
-    return () => neighbors.forEach((image) => image.removeAttribute("src"))
+    return () => neighbors.forEach((photo) => photo.dispose())
   }, [displayedIndex])
 
   useEffect(() => {
@@ -159,7 +159,7 @@ export const PhotoViewer = ({
     const timer = window.setTimeout(() => {
       setFrame((current) =>
         current?.revision === frameRevision
-          ? { ...current, previous: null, entering: false }
+          ? { ...current, previous: null, previousSrc: null, entering: false }
           : current,
       )
     }, PHOTO_TRANSITION_MS)
@@ -240,9 +240,17 @@ export const PhotoViewer = ({
   }
 
   const visibleIndex = frame?.index ?? request.index
-  const layers = frame
-    ? [frame.previous, frame.index].filter((index) => index !== null)
-    : []
+  const layers: { index: number; src: string; outgoing: boolean }[] = []
+  if (frame) {
+    if (frame.previous !== null && frame.previousSrc) {
+      layers.push({
+        index: frame.previous,
+        src: frame.previousSrc,
+        outgoing: true,
+      })
+    }
+    layers.push({ index: frame.index, src: frame.src, outgoing: false })
+  }
   const transitionStyle = {
     "--photo-direction": frame?.direction ?? 0,
     "--photo-exit-start": `${frame?.offset ?? 0}px`,
@@ -294,13 +302,12 @@ export const PhotoViewer = ({
             draggable={false}
           />
         )}
-        {layers.map((index) => {
-          const outgoing = index === frame?.previous
+        {layers.map(({ index, src, outgoing }) => {
           return (
             <img
               key={index}
               className={`gallery-lightbox__image${outgoing ? " gallery-lightbox__image--outgoing" : frame?.entering ? " gallery-lightbox__image--incoming" : ""}`}
-              src={GALLERY_IMAGES[index]}
+              src={src}
               width={GALLERY_IMAGE_SIZES[index].width}
               height={GALLERY_IMAGE_SIZES[index].height}
               alt={outgoing ? "" : `웨딩 사진 ${index + 1}`}

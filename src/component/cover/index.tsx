@@ -6,8 +6,10 @@ import {
   WEDDING_DATE_FORMAT,
 } from "../../const"
 import {
+  COVER_AVIF_IMAGE,
   COVER_IMAGE,
   COVER_IMAGE_SIZE,
+  GALLERY_AVIF_IMAGES,
   GALLERY_IMAGES,
   GALLERY_IMAGE_SIZES,
 } from "../../images"
@@ -33,31 +35,36 @@ export const Cover = ({ design }: { design?: string }) => {
   const activeDesign = design ?? document.documentElement.dataset.design
   const artwork: Record<
     string,
-    { src: string; alt: string; width: number; height: number }
+    { src: string; avif: string; alt: string; width: number; height: number }
   > = {
     cinema: {
       src: GALLERY_IMAGES[2],
+      avif: GALLERY_AVIF_IMAGES[2],
       ...GALLERY_IMAGE_SIZES[2],
       alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}이 함께한 웨딩 사진`,
     },
     editorial: {
       src: GALLERY_IMAGES[0],
+      avif: GALLERY_AVIF_IMAGES[0],
       ...GALLERY_IMAGE_SIZES[0],
       alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}의 웨딩 사진`,
     },
     aurora: {
       src: GALLERY_IMAGES[4],
+      avif: GALLERY_AVIF_IMAGES[4],
       ...GALLERY_IMAGE_SIZES[4],
       alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}이 함께한 웨딩 사진`,
     },
     letter: {
       src: GALLERY_IMAGES[7],
+      avif: GALLERY_AVIF_IMAGES[7],
       ...GALLERY_IMAGE_SIZES[7],
       alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}이 함께한 웨딩 사진`,
     },
   }
   const coverArt = artwork[activeDesign ?? ""] ?? {
     src: COVER_IMAGE,
+    avif: COVER_AVIF_IMAGE,
     ...COVER_IMAGE_SIZE,
     alt: `${GROOM_FULLNAME}과 ${BRIDE_FULLNAME}의 웨딩 사진`,
   }
@@ -78,13 +85,23 @@ export const Cover = ({ design }: { design?: string }) => {
       </div>
       {/* 커버 이미지 */}
       <div className="image-wrapper">
-        <img
-          src={coverArt.src}
-          alt={coverArt.alt}
-          width={coverArt.width}
-          height={coverArt.height}
-          fetchPriority="high"
-        />
+        <picture>
+          <source srcSet={coverArt.avif} type="image/avif" />
+          <img
+            src={coverArt.src}
+            alt={coverArt.alt}
+            width={coverArt.width}
+            height={coverArt.height}
+            fetchPriority="high"
+            onError={(event) => {
+              // AVIF 디코딩이나 다운로드가 실패하면 같은 고화질 WebP로 대체합니다.
+              const source = event.currentTarget.previousElementSibling
+              if (source instanceof HTMLSourceElement && source.srcset) {
+                source.removeAttribute("srcset")
+              }
+            }}
+          />
+        </picture>
       </div>
       <div className="subtitle">Save the date for the wedding of</div>
       {/* 이름 표시 */}

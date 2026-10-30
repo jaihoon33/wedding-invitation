@@ -10,9 +10,7 @@ import {
   SHARE_IMAGE_FILE,
   GROOM_FULLNAME,
   BRIDE_FULLNAME,
-  WEDDING_DATE,
-  LOCATION,
-  WEDDING_DATE_FORMAT,
+  SHARE_DESCRIPTION,
 } from "./src/const"
 
 const distFolder = "build"
@@ -38,7 +36,7 @@ export default defineConfig({
           SHARE_IMAGE_FILE,
           GROOM_FULLNAME,
           BRIDE_FULLNAME,
-          DESCRIPTION: `${WEDDING_DATE.format(WEDDING_DATE_FORMAT)} ${LOCATION}`,
+          DESCRIPTION: SHARE_DESCRIPTION,
         },
       },
     }),
