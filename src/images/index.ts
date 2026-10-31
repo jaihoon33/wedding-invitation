@@ -44,8 +44,6 @@ import photo21 from "./wedding-20261030/KakaoTalk_20261030_081949307_21.webp"
 import thumb21 from "./wedding-20261030/thumbs/KakaoTalk_20261030_081949307_21.webp"
 import photo22 from "./wedding-20261030/KakaoTalk_20261030_081949307_22.webp"
 import thumb22 from "./wedding-20261030/thumbs/KakaoTalk_20261030_081949307_22.webp"
-import photo23 from "./wedding-20261030/KakaoTalk_20261030_081949307_23.webp"
-import thumb23 from "./wedding-20261030/thumbs/KakaoTalk_20261030_081949307_23.webp"
 import photo24 from "./wedding-20261030/KakaoTalk_20261030_081949307_24.webp"
 import thumb24 from "./wedding-20261030/thumbs/KakaoTalk_20261030_081949307_24.webp"
 import photo25 from "./wedding-20261030/KakaoTalk_20261030_081949307_25.webp"
@@ -75,7 +73,6 @@ import avif19 from "./wedding-20261030/avif/KakaoTalk_20261030_081949307_19.avif
 import avif20 from "./wedding-20261030/avif/KakaoTalk_20261030_081949307_20.avif"
 import avif21 from "./wedding-20261030/avif/KakaoTalk_20261030_081949307_21.avif"
 import avif22 from "./wedding-20261030/avif/KakaoTalk_20261030_081949307_22.avif"
-import avif23 from "./wedding-20261030/avif/KakaoTalk_20261030_081949307_23.avif"
 import avif24 from "./wedding-20261030/avif/KakaoTalk_20261030_081949307_24.avif"
 import avif25 from "./wedding-20261030/avif/KakaoTalk_20261030_081949307_25.avif"
 import avif26 from "./wedding-20261030/avif/KakaoTalk_20261030_081949307_26.avif"
@@ -105,7 +102,6 @@ export const GALLERY_IMAGES = [
   photo20,
   photo21,
   photo22,
-  photo23,
   photo24,
   photo25,
   photo26,
@@ -136,7 +132,6 @@ export const GALLERY_AVIF_IMAGES = [
   avif20,
   avif21,
   avif22,
-  avif23,
   avif24,
   avif25,
   avif26,
@@ -167,7 +162,6 @@ export const GALLERY_THUMBNAILS = [
   thumb20,
   thumb21,
   thumb22,
-  thumb23,
   thumb24,
   thumb25,
   thumb26,
@@ -198,7 +192,6 @@ export const GALLERY_IMAGE_SIZES = [
   { width: 2134, height: 3200 },
   { width: 2133, height: 3200 },
   { width: 2134, height: 3200 },
-  { width: 2133, height: 3200 },
   { width: 2134, height: 3200 },
   { width: 2133, height: 3200 },
   { width: 2133, height: 3200 },
@@ -207,4 +200,5 @@ export const GALLERY_IMAGE_SIZES = [
 /** 사용자가 지정한 _24 사진을 메인과 갤러리에서 공유합니다. */
 export const COVER_AVIF_IMAGE = avif24
 export const COVER_IMAGE = photo24
-export const COVER_IMAGE_SIZE = GALLERY_IMAGE_SIZES[24]
+export const COVER_IMAGE_SIZE =
+  GALLERY_IMAGE_SIZES[GALLERY_IMAGES.indexOf(COVER_IMAGE)]
